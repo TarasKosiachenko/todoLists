@@ -13,3 +13,15 @@ h1 a {
   min-height: 100vh;
   justify-content: space-between;
 }
+
+.todo_list {
+  position: relative;
+}
+
+.btn-group {
+  position: absolute;
+  left: -150px;
+}
+.btn-group label {
+  transition: all 1s;
+}

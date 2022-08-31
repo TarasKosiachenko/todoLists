@@ -20,7 +20,9 @@ function Lists() {
       {
         lists.map((list) => (
           <Nav.Item key={list.id}>
-            <Nav.Link eventKey={list.id}>{list.title}</Nav.Link>
+            <Nav.Link eventKey={list.id}>
+              {list.title}
+            </Nav.Link>
           </Nav.Item>
         ))
       }

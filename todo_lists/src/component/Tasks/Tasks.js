@@ -15,20 +15,17 @@ function Tasks() {
       setTasks(response.data);
     });
   }, []);
-
   if (!tasks) return null;
-
-  console.log("tasks", tasks);
 
   return (
     <>
-      {
-        tasks.map((todo) => (
-          <Tab.Pane key={todo.id} eventKey={todo.list_id}>
-            <TaskItem todo={todo}/>
-          </Tab.Pane>
-        ))
-      }
+        {
+          tasks.map((todo) => (
+            <Tab.Pane key={todo.id} eventKey={todo.list_id}>
+              <TaskItem todo={todo} />
+            </Tab.Pane>
+          ))
+        }
     </>
   );
 }
