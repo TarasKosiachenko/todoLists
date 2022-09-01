@@ -3,8 +3,7 @@ import axios from "axios";
 import "./index.css";
 import { Container, Tab, Nav, Row, Col, Button } from "react-bootstrap";
 
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import Form from "react-bootstrap/Form";
 
 import Lists from "../Lists/Lists";
 import Tasks from "../Tasks/Tasks";
@@ -12,9 +11,14 @@ import Tasks from "../Tasks/Tasks";
 const baseURL = "http://localhost:5000/dashboard";
 
 export default function Note() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    due_date: null,
+    done: false,
+    list_id: 2,
+  });
+
   const [responseObj, setResponseObj] = useState(null);
   const [lists, setLists] = useState(null);
 
@@ -23,6 +27,13 @@ export default function Note() {
       setLists(response.data.list);
     });
   }, []);
+
+  function handleChange(e) {
+    setForm((state) => ({
+      ...state,
+      [e.target.name]: e.target.value,
+    }));
+  }
 
   async function postTaskOnServer(taskBody) {
     return await axios
@@ -42,18 +53,10 @@ export default function Note() {
   }
 
   function createTasks(e) {
-    console.log(e);
     e.preventDefault();
     e.stopPropagation();
-    if (title.length) {
-      const taskBody = {
-        name: title,
-        description: description,
-        due_date: date ? date : null,
-        done: false,
-        list_id: 1,
-      };
-      postTaskOnServer(taskBody);
+    if (form.name.length) {
+      postTaskOnServer(form);
       e.target.reset();
     } else {
     }
@@ -70,52 +73,50 @@ export default function Note() {
               <Lists lists={lists} />
             </Nav>
             <Nav className="mb-3">
-              <form name="task" onSubmit={createTasks}>
+              <form
+                name="task"
+                onSubmit={createTasks}
+                style={{ width: "100%" }}
+              >
                 <div className="mb-2">
                   <input
                     className="form-control input_name"
                     type="text"
                     placeholder="Title"
-                    onChange={(e) => setTitle(e.target.value)}
+                    name="name"
+                    onChange={handleChange}
                   />
-                  <span className="err_empty_name">enter a task title</span>
                 </div>
                 <div className="mb-2">
                   <textarea
                     className="form-control"
-                    name="Text1"
+                    name="description"
                     placeholder="Description"
                     cols="40"
                     rows="5"
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={handleChange}
                   />
                 </div>
-                <div className="mb-2">
-                  <input
-                    className="form-control"
-                    type="date"
-                    onChange={(e) => setDate(e.target.value)}
-                  />
-                </div>
-
+                <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
+                  {lists?.map((el) => (
+                    <option key={el.id} value={el.id}>
+                      {el.title}
+                    </option>
+                  ))}
+                </Form.Select>
                 <div
                   className="d-flex"
                   style={{ justifyContent: "space-between" }}
                 >
-                  <DropdownButton
-                    key="up"
-                    id={`dropdown-button-drop-up`}
-                    drop="up"
-                    variant="outline-secondary"
-                    title={"List"}
-                  >
-                    {
-                      lists?.map(el => (
-                        <Dropdown.Item key={el.id} eventKey={el.id}>{el.title}</Dropdown.Item>
-                      ))
-                    }
-                  </DropdownButton>
-
+                  <div>
+                    <input
+                      className="form-control"
+                      name="due_date"
+                      type="date"
+                      style={{ width: "130px" }}
+                      onChange={handleChange}
+                    />
+                  </div>
                   <Button
                     type="submit"
                     variant="outline-secondary"
@@ -144,7 +145,7 @@ export default function Note() {
                   defaultChecked
                 />
                 <label className="btn btn-outline-secondary" htmlFor="tasks2">
-                  Undone
+                  Open
                 </label>
 
                 <input

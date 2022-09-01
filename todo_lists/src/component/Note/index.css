@@ -1,16 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amaranth:wght@700&display=swap');
 
-h1 a {
-  font-family: 'Courgette', cursive;
+h1 {
+  font-family: 'Amaranth', sans-serif;
   color: #333;
   text-decoration: none;
+}
+
+option:hover {
+  background: rgb(139, 139, 139) !important;
 }
 
 .listSidebar {
   background: rgb(228, 228, 228);
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   justify-content: space-between;
 }
 
@@ -20,7 +24,10 @@ h1 a {
 
 .btn-group {
   position: absolute;
-  left: -150px;
+  left: -100px;
+}
+.btn-group>.btn {
+  padding: 0 5px;
 }
 .btn-group label {
   transition: all 1s;
