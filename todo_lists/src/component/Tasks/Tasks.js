@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Tab } from "react-bootstrap";
 import "./index.css";
 
-import TaskItem from "../TaskItem/TaskItem"
+import TaskItem from "../TaskItem/TaskItem";
 
-function Tasks() {
-  const [tasks, setTasks] = React.useState(null);
-
+function Tasks({ responseObj }) {
   const url = "http://localhost:5000/tasks";
-  React.useEffect(() => {
+  const [tasks, setTasks] = useState(null);
+
+  useEffect(() => {
+    if (responseObj !== null) {
+      setTasks((state) => [...state, responseObj]);
+    }
+  }, [responseObj]);
+
+  useEffect(() => {
     axios.get(url).then((response) => {
       setTasks(response.data);
     });
@@ -18,13 +24,13 @@ function Tasks() {
 
   return (
     <>
-        {
-          tasks.map((todo) => (
-            <Tab.Pane key={todo.id} eventKey={todo.list_id}>
-              <TaskItem todo={todo}/>
-            </Tab.Pane>
-          ))
-        }
+      {
+      tasks.map((todo) => (
+        <Tab.Pane key={todo.id} eventKey={todo.list_id}>
+          <TaskItem todo={todo} />
+        </Tab.Pane>
+      ))
+      }
     </>
   );
 }

@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
 import { Container, Tab, Nav, Row, Col, Button } from "react-bootstrap";
 
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+
 import Lists from "../Lists/Lists";
 import Tasks from "../Tasks/Tasks";
+
+const baseURL = "http://localhost:5000/dashboard";
 
 export default function Note() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [responseObj, setResponseObj] = useState(null);
+  const [lists, setLists] = useState(null);
+
+  useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      setLists(response.data.list);
+    });
+  }, []);
 
   async function postTaskOnServer(taskBody) {
     return await axios
-        .post("http://localhost:5000/tasks", taskBody)
-        .then((response) => {
-          console.log('response', response);
-          // setArticleId(response.data.id) записать ответ в переменную
-        });
+      .post("http://localhost:5000/tasks", taskBody)
+      .then((response) => {
+        setResponseObj(response.data[0]);
+      });
   }
 
   function changeTargerRadio(e) {
@@ -30,21 +42,20 @@ export default function Note() {
   }
 
   function createTasks(e) {
+    console.log(e);
     e.preventDefault();
     e.stopPropagation();
-
     if (title.length) {
       const taskBody = {
         name: title,
-        deskription: description,
+        description: description,
         due_date: date ? date : null,
         done: false,
         list_id: 1,
       };
-      postTaskOnServer(taskBody)
-    }
-    else {
-
+      postTaskOnServer(taskBody);
+      e.target.reset();
+    } else {
     }
   }
 
@@ -55,9 +66,10 @@ export default function Note() {
           <Col sm={4} className="listSidebar">
             <Nav variant="pills" className="flex-column mt-3">
               <h1>Lists</h1>
-              <Lists />
+
+              <Lists lists={lists} />
             </Nav>
-            <Nav className="mb-3" style={{ justifyContent: "space-between" }}>
+            <Nav className="mb-3">
               <form name="task" onSubmit={createTasks}>
                 <div className="mb-2">
                   <input
@@ -85,13 +97,33 @@ export default function Note() {
                     onChange={(e) => setDate(e.target.value)}
                   />
                 </div>
-                <Button
-                  type="submit"
-                  variant="outline-secondary"
-                  onMouseDown={(e) => e.preventDefault()}
+
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between" }}
                 >
-                  Create
-                </Button>
+                  <DropdownButton
+                    key="up"
+                    id={`dropdown-button-drop-up`}
+                    drop="up"
+                    variant="outline-secondary"
+                    title={"List"}
+                  >
+                    {
+                      lists?.map(el => (
+                        <Dropdown.Item key={el.id} eventKey={el.id}>{el.title}</Dropdown.Item>
+                      ))
+                    }
+                  </DropdownButton>
+
+                  <Button
+                    type="submit"
+                    variant="outline-secondary"
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    Create
+                  </Button>
+                </div>
               </form>
             </Nav>
           </Col>
@@ -126,7 +158,7 @@ export default function Note() {
                 </label>
               </div>
 
-              <Tasks />
+              <Tasks responseObj={responseObj} />
             </Tab.Content>
           </Col>
         </Row>
