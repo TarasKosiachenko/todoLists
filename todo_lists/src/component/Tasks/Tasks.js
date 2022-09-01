@@ -5,13 +5,12 @@ import "./index.css";
 
 import TaskItem from "../TaskItem/TaskItem"
 
-const baseURL = "http://localhost:5000/tasks";
-
 function Tasks() {
   const [tasks, setTasks] = React.useState(null);
 
+  const url = "http://localhost:5000/tasks";
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
+    axios.get(url).then((response) => {
       setTasks(response.data);
     });
   }, []);
@@ -22,7 +21,7 @@ function Tasks() {
         {
           tasks.map((todo) => (
             <Tab.Pane key={todo.id} eventKey={todo.list_id}>
-              <TaskItem todo={todo} />
+              <TaskItem todo={todo}/>
             </Tab.Pane>
           ))
         }

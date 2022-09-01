@@ -61,9 +61,9 @@ li.overdue svg path {
   position: absolute;
   right: 10px;
   top: 10px;
-  width: 16px;
-  height: 16px;
-  padding: 0 !important;
+  width: 14px;
+  height: 14px;
+  padding: 0 0 2px !important;
   line-height: 0 !important;
   border-radius: 30px !important;
 }
