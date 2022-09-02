@@ -8,8 +8,8 @@ function Lists({ lists }) {
     <>
       {
         lists?.map((list) => (
-          <Nav.Item key={list.id}>
-            <Nav.Link eventKey={list.id}>
+          <Nav.Item key={list.id || list.list_id}>
+            <Nav.Link eventKey={list.list_id || list.id}>
               {list.title}
             </Nav.Link>
           </Nav.Item>

@@ -2,10 +2,12 @@ import React from "react";
 import "./index.css";
 import axios from "axios";
 
-function TaskItem(todo) {
+import Lists from "../Lists/Lists";
+
+function TaskItem({todo}) {
   const url = "http://localhost:5000/tasks/";
   async function changeTaskDone(id) {
-    return await axios.patch(url + id, { done: !todo.todo.done })
+    return await axios.patch(url + id, { done: !todo.done })
   }
   async function deleteTask(id) {
     return await axios.delete(url + id)
@@ -23,14 +25,28 @@ function TaskItem(todo) {
     }
   }
 
+function getFormatedDate(date) {
+  if (date === null || date === "") {
+    return "not specified";
+  } else {
+    date = new Date(date);
+  }
+  const values = [
+    (date.getDate() < 10 ? "0" : "") + date.getDate(),
+    (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1),
+    date.getFullYear() - 2000,
+  ];
+  return values.join(".");
+}
+
   return (
     <>
       <li
         onClick={changeTask}
-        id={todo.todo.id}
+        id={todo.id}
         className={
-          (new Date(todo.todo.due_date) < Date.now() ? "overdue " : "") +
-          (todo.todo.done ? "done" : "")
+          (new Date(todo.due_date) < new Date(Date.now() - ( 3600 * 1000 * 24)) ? "overdue " : "") +
+          (todo.done ? "done" : "")
         }>
         <div>
           <svg
@@ -53,24 +69,28 @@ function TaskItem(todo) {
               strokeLinejoin="round"
             />
           </svg>
-          <span>{todo.todo.due_date}</span>
+          <span>{getFormatedDate(todo.due_date)}</span>
         </div>
 
         <div>
           <input
             type="checkbox"
-            className={todo.todo.done ? "checkboxTask checked" : "checkboxTask"}
-            defaultChecked={todo.todo.done ? "checked" : ""}
+            className={todo.done ? "checkboxTask checked" : "checkboxTask"}
+            defaultChecked={todo.done ? "checked" : ""}
           />
-          <h5>{todo.todo.name ? todo.todo.name : ""}</h5>
+          <h5>{todo.name ? todo.name : ""}</h5>
         </div>
 
         <div>
-          <p>{todo.todo.description}</p>
+          <p>{todo.description}</p>
         </div>
         <button type="button" className="btn btn-outline-danger delete_task">
           X
         </button>
+
+        {
+          todo.list ? <Lists lists={[todo.list]} /> : ''
+        }
       </li>
     </>
   );

@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 
 import Lists from "../Lists/Lists";
 import Tasks from "../Tasks/Tasks";
+import TasksToday from "../TasksToday/TasksToday";
 
 const baseURL = "http://localhost:5000/dashboard";
 
@@ -52,13 +53,16 @@ export default function Note() {
     }
   }
 
+
   function createTasks(e) {
+    // console.log(e.target[0].value);
     e.preventDefault();
     e.stopPropagation();
     if (form.name.length) {
       postTaskOnServer(form);
       e.target.reset();
-    } else {
+    } else {    
+    //  e.target[0].value
     }
   }
 
@@ -71,6 +75,13 @@ export default function Note() {
               <h1>Lists</h1>
 
               <Lists lists={lists} />
+
+              <Nav.Item>
+                <Nav.Link eventKey='3'>
+                  task today
+                </Nav.Link>
+              </Nav.Item>
+
             </Nav>
             <Nav className="mb-3">
               <form
@@ -113,7 +124,7 @@ export default function Note() {
                       className="form-control"
                       name="due_date"
                       type="date"
-                      style={{ width: "130px" }}
+                      style={{ width: "140px" }}
                       onChange={handleChange}
                     />
                   </div>
@@ -160,6 +171,8 @@ export default function Note() {
               </div>
 
               <Tasks responseObj={responseObj} />
+              <TasksToday responseObj={responseObj} />
+
             </Tab.Content>
           </Col>
         </Row>
