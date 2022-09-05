@@ -57,7 +57,6 @@ export default function Note() {
 
 
   function createTasks(e) {
-    // console.log(e.target[0].value);
     e.preventDefault();
     e.stopPropagation();
     if (form.name.length) {
