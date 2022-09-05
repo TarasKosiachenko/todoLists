@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Tab } from "react-bootstrap";
 
 import TaskItem from "../TaskItem/TaskItem";
 
@@ -26,9 +25,7 @@ function TasksToday({ responseObj }) {
     <>
       {
       tasksToday.map((todo) => (
-        <Tab.Pane key={todo.id} eventKey={"3"}>
-          <TaskItem todo={todo} />
-        </Tab.Pane>
+          <TaskItem key={todo.id} todo={todo} />
       ))
       }
     </>

@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.css";
-import { Nav } from "react-bootstrap";
+import { NavLink } from 'react-router-dom'
 
 function Lists({ lists }) {
 
@@ -8,11 +8,11 @@ function Lists({ lists }) {
     <>
       {
         lists?.map((list) => (
-          <Nav.Item key={list.id || list.list_id}>
-            <Nav.Link eventKey={list.list_id || list.id}>
-              {list.title}
-            </Nav.Link>
-          </Nav.Item>
+          <NavLink to={"/lists/" + (list.id || list.list_id)} key={list.id || list.list_id}
+            className={({ isActive }) => (isActive ? 'active' : 'inactive')}
+          >
+            {list.title}
+          </NavLink>
         ))
       }
     </>

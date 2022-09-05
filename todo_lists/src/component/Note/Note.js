@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
+import { Route, Routes, NavLink } from "react-router-dom";
+
 import { Container, Tab, Nav, Row, Col, Button } from "react-bootstrap";
 
 import Form from "react-bootstrap/Form";
@@ -74,13 +76,12 @@ export default function Note() {
             <Nav variant="pills" className="flex-column mt-3">
               <h1>Lists</h1>
 
+              
               <Lists lists={lists} />
 
-              <Nav.Item>
-                <Nav.Link eventKey='3'>
-                  task today
-                </Nav.Link>
-              </Nav.Item>
+              <NavLink to={"/today"} className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
+                  Task Today
+              </NavLink>
 
             </Nav>
             <Nav className="mb-3">
@@ -107,6 +108,7 @@ export default function Note() {
                     rows="5"
                     onChange={handleChange}
                   />
+
                 </div>
                 <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
                   {lists?.map((el) => (
@@ -170,8 +172,10 @@ export default function Note() {
                 </label>
               </div>
 
-              <Tasks responseObj={responseObj} />
-              <TasksToday responseObj={responseObj} />
+              <Routes>
+              <Route path='/lists/:id' element={<Tasks responseObj={responseObj} />}/>
+              <Route path={'/today'} element={<TasksToday responseObj={responseObj} />}/>
+              </Routes>
 
             </Tab.Content>
           </Col>
