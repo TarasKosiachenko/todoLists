@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
-import { Route, Routes, NavLink } from "react-router-dom";
+import { Route, Routes, NavLink, Link } from "react-router-dom";
 
 import { Container, Tab, Nav, Row, Col, Button } from "react-bootstrap";
 
 import Form from "react-bootstrap/Form";
 
+import HomePage from "../HomePage/HomePage";
 import Lists from "../Lists/Lists";
 import Tasks from "../Tasks/Tasks";
 import TasksToday from "../TasksToday/TasksToday";
@@ -62,8 +63,8 @@ export default function Note() {
     if (form.name.length) {
       postTaskOnServer(form);
       e.target.reset();
-    } else {    
-    //  e.target[0].value
+    } else {
+      //  e.target[0].value
     }
   }
 
@@ -72,73 +73,74 @@ export default function Note() {
       <Tab.Container id="left-tabs" defaultActiveKey="myNotes">
         <Row>
           <Col sm={4} className="listSidebar">
-            <Nav variant="pills" className="flex-column mt-3">
-              <h1>Lists</h1>
+              <Nav variant="pills" className="flex-column mt-3">
 
-              
-              <Lists lists={lists} />
+                <Link to={"/"}>
+                  <h1>Lists</h1>
+                </Link>
 
-              <NavLink to={"/today"} className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
+                <Lists lists={lists} />
+
+                <NavLink to={"/today"} className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
                   Task Today
-              </NavLink>
+                </NavLink>
 
-            </Nav>
-            <Nav className="mb-3">
-              <form
-                name="task"
-                onSubmit={createTasks}
-                style={{ width: "100%" }}
-              >
-                <div className="mb-2">
-                  <input
-                    className="form-control input_name"
-                    type="text"
-                    placeholder="Title"
-                    name="name"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="mb-2">
-                  <textarea
-                    className="form-control"
-                    name="description"
-                    placeholder="Description"
-                    cols="40"
-                    rows="5"
-                    onChange={handleChange}
-                  />
-
-                </div>
-                <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
-                  {lists?.map((el) => (
-                    <option key={el.id} value={el.id}>
-                      {el.title}
-                    </option>
-                  ))}
-                </Form.Select>
-                <div
-                  className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+              </Nav>
+              <Nav className="mb-3">
+                <form
+                  name="task"
+                  onSubmit={createTasks}
+                  style={{ width: "100%" }}
                 >
-                  <div>
+                  <div className="mb-2">
                     <input
-                      className="form-control"
-                      name="due_date"
-                      type="date"
-                      style={{ width: "140px" }}
+                      className="form-control input_name"
+                      type="text"
+                      placeholder="Title"
+                      name="name"
                       onChange={handleChange}
                     />
                   </div>
-                  <Button
-                    type="submit"
-                    variant="outline-secondary"
-                    onMouseDown={(e) => e.preventDefault()}
+                  <div className="mb-2">
+                    <textarea
+                      className="form-control"
+                      name="description"
+                      placeholder="Description"
+                      cols="40"
+                      rows="5"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
+                    {lists?.map((el) => (
+                      <option key={el.id} value={el.id}>
+                        {el.title}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <div
+                    className="d-flex"
+                    style={{ justifyContent: "space-between" }}
                   >
-                    Create
-                  </Button>
-                </div>
-              </form>
-            </Nav>
+                    <div>
+                      <input
+                        className="form-control"
+                        name="due_date"
+                        type="date"
+                        style={{ width: "140px" }}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      variant="outline-secondary"
+                      onMouseDown={(e) => e.preventDefault()}
+                    >
+                      Create
+                    </Button>
+                  </div>
+                </form>
+              </Nav>
           </Col>
 
           <Col sm={8} className="text-center">
@@ -172,8 +174,9 @@ export default function Note() {
               </div>
 
               <Routes>
-              <Route path='/lists/:id' element={<Tasks responseObj={responseObj} />}/>
-              <Route path={'/today'} element={<TasksToday responseObj={responseObj} />}/>
+                <Route path={'/'} element={<HomePage />} />
+                <Route path='/lists/:id' element={<Tasks responseObj={responseObj} />} />
+                <Route path={'/today'} element={<TasksToday responseObj={responseObj} />} />
               </Routes>
 
             </Tab.Content>

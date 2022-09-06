@@ -4,13 +4,10 @@ import axios from "axios";
 
 import Lists from "../Lists/Lists";
 
-function TaskItem({todo}) {
+function TaskItem({todo, taskDelete }) {
   const url = "http://localhost:5000/tasks/";
   async function changeTaskDone(id) {
     return await axios.patch(url + id, { done: !todo.done })
-  }
-  async function deleteTask(id) {
-    return await axios.delete(url + id)
   }
 
   function changeTask(e) {
@@ -18,10 +15,6 @@ function TaskItem({todo}) {
     if (e.target.className === "checkboxTask" || e.target.className === "checkboxTask checked") {
       changeTaskDone(Number(e.currentTarget.id))
       e.currentTarget.classList.toggle("done")
-    }
-    if (e.target.className === "btn btn-outline-danger delete_task") {
-      deleteTask(Number(e.currentTarget.id))
-      .then(e.currentTarget.parentElement.remove())
     }
   }
 
@@ -84,7 +77,7 @@ function getFormatedDate(date) {
         <div>
           <p>{todo.description}</p>
         </div>
-        <button type="button" className="btn btn-outline-danger delete_task">
+        <button onClick={() => taskDelete(todo)} type="button" className="btn btn-outline-danger delete_task">
           X
         </button>
 
