@@ -4,7 +4,6 @@ import "./index.css";
 import { Route, Routes, NavLink, Link } from "react-router-dom";
 
 import { Container, Tab, Nav, Row, Col, Button } from "react-bootstrap";
-
 import Form from "react-bootstrap/Form";
 
 import HomePage from "../HomePage/HomePage";
@@ -55,7 +54,6 @@ export default function Note() {
       document.querySelector(".todo_list").classList.add("show-done");
     }
   }
-
 
   function createTasks(e) {
     e.preventDefault();

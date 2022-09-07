@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import { Tab } from "react-bootstrap";
 import "./index.css";
 import { useParams } from 'react-router-dom'
 
@@ -11,16 +10,16 @@ function Tasks({ responseObj }) {
   const [tasks, setTasks] = useState([]);
   const listId = +useParams().id
 
-
-  // async function deleteTask(id) {
-  //   return await axios.delete(url + id)
-  // }
-
   async function taskDelete(todo) {
     return await axios.delete(url + todo.id)
-      .then(() => {setTasks([...tasks.filter(task => task.id !== todo.id)])})
+      .then(() => { setTasks(tasks.filter(task => task.id !== todo.id)) })
   }
 
+  async function changeTaskDone(todo) {
+    console.log(todo);
+    return await axios.patch("http://localhost:5000/tasks/" + todo.id, { done: !todo.done })
+      .then(() => { setTasks(tasks.map(task => task.id === todo.id ? todo : task)) })
+  }
 
   useEffect(() => {
     if (responseObj !== null) {
@@ -35,15 +34,12 @@ function Tasks({ responseObj }) {
   }, []);
   if (!tasks) return null;
 
-
   return (
     <>
       {
-      tasks.filter(t => t.list_id === listId).map((todo) => (
-      
-          <TaskItem key={todo.id} todo={todo} taskDelete={taskDelete} />
-       
-      ))
+        tasks.filter(t => t.list_id === listId).map((todo) => (
+          <TaskItem key={todo.id} todo={todo} changeTaskDone={changeTaskDone} taskDelete={taskDelete} />
+        ))
       }
     </>
   );

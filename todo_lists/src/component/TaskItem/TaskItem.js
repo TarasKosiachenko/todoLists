@@ -1,41 +1,27 @@
 import React from "react";
 import "./index.css";
-import axios from "axios";
 
 import Lists from "../Lists/Lists";
 
-function TaskItem({todo, taskDelete }) {
-  const url = "http://localhost:5000/tasks/";
-  async function changeTaskDone(id) {
-    return await axios.patch(url + id, { done: !todo.done })
-  }
+function TaskItem({todo, taskDelete, changeTaskDone }) {
 
-  function changeTask(e) {
-    e.stopPropagation();
-    if (e.target.className === "checkboxTask" || e.target.className === "checkboxTask checked") {
-      changeTaskDone(Number(e.currentTarget.id))
-      e.currentTarget.classList.toggle("done")
+  function getFormatedDate(date) {
+    if (date === null || date === "") {
+      return "not specified";
+    } else {
+      date = new Date(date);
     }
+    const values = [
+      (date.getDate() < 10 ? "0" : "") + date.getDate(),
+      (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1),
+      date.getFullYear() - 2000,
+    ];
+    return values.join(".");
   }
-
-function getFormatedDate(date) {
-  if (date === null || date === "") {
-    return "not specified";
-  } else {
-    date = new Date(date);
-  }
-  const values = [
-    (date.getDate() < 10 ? "0" : "") + date.getDate(),
-    (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1),
-    date.getFullYear() - 2000,
-  ];
-  return values.join(".");
-}
 
   return (
     <>
       <li
-        onClick={changeTask}
         id={todo.id}
         className={
           (new Date(todo.due_date) < new Date(Date.now() - ( 3600 * 1000 * 24)) ? "overdue " : "") +
@@ -68,6 +54,7 @@ function getFormatedDate(date) {
         <div>
           <input
             type="checkbox"
+            onClick={() => changeTaskDone(todo)}
             className={todo.done ? "checkboxTask checked" : "checkboxTask"}
             defaultChecked={todo.done ? "checked" : ""}
           />
