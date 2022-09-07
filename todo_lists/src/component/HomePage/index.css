@@ -2,10 +2,40 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    width: 100%;
+    overflow: hidden;
 }
 
-.homeContent img {
+#pot {
+    top: 15%;
     width: 50%;
+    position: absolute;
+    animation: linear infinite;
+    animation-name: run;
+    animation-duration: 6s;
+}
+
+@keyframes run {
+    0% {
+        left: 0;
+    }
+
+    48% {
+        -webkit-transform: rotateY(0deg);
+    }
+
+    50% {
+        left: calc(100% - 200px);
+        -webkit-transform: rotateY(180deg);
+    }
+
+    98% {
+        -webkit-transform: rotateY(180deg);
+    }
+
+    100% {
+        left: 0;
+        -webkit-transform: rotateY(0deg);
+    }
 }

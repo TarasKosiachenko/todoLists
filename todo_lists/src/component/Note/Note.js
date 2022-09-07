@@ -62,7 +62,8 @@ export default function Note() {
       postTaskOnServer(form);
       e.target.reset();
     } else {
-      //  e.target[0].value
+      e.target[0].className = 'form-control emptyInput'
+      setTimeout(() => e.target[0].className = 'form-control', 2000);
     }
   }
 
