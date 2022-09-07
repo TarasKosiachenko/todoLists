@@ -11,9 +11,22 @@ import Lists from "../Lists/Lists";
 import Tasks from "../Tasks/Tasks";
 import TasksToday from "../TasksToday/TasksToday";
 
-const baseURL = "http://localhost:5000/dashboard";
+
+import { axiosLists } from "../../asyncActions/lists";
+import { axiosAddTask } from "../../asyncActions/tasks";
+import { useDispatch, useSelector } from 'react-redux';
+// const baseURL = "http://localhost:5000/dashboard";
+
 
 export default function Note() {
+
+  const dispatch = useDispatch()
+  const storeLists = useSelector(state => state.listsReduser.lists)
+
+  useEffect(() => {
+    dispatch(axiosLists())
+  }, []);
+
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -23,13 +36,13 @@ export default function Note() {
   });
 
   const [responseObj, setResponseObj] = useState(null);
-  const [lists, setLists] = useState(null);
+  // const [lists, setLists] = useState(null);
 
-  useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setLists(response.data.list);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(baseURL).then((response) => {
+  //     setLists(response.data.list);
+  //   });
+  // }, []);
 
   function handleChange(e) {
     setForm((state) => ({
@@ -38,13 +51,13 @@ export default function Note() {
     }));
   }
 
-  async function postTaskOnServer(taskBody) {
-    return await axios
-      .post("http://localhost:5000/tasks", taskBody)
-      .then((response) => {
-        setResponseObj(response.data[0]);
-      });
-  }
+  // async function postTaskOnServer(taskBody) {
+  //   return await axios
+  //     .post("http://localhost:5000/tasks", taskBody)
+  //     .then((response) => {
+  //       setResponseObj(response.data[0]);
+  //     });
+  // }
 
   function changeTargerRadio(e) {
     e.stopPropagation();
@@ -59,7 +72,8 @@ export default function Note() {
     e.preventDefault();
     e.stopPropagation();
     if (form.name.length) {
-      postTaskOnServer(form);
+      dispatch(axiosAddTask(form))
+      // postTaskOnServer(form);
       e.target.reset();
     } else {
       e.target[0].className = 'form-control emptyInput'
@@ -78,7 +92,7 @@ export default function Note() {
                   <h1>Lists</h1>
                 </Link>
 
-                <Lists lists={lists} />
+                <Lists storeLists={storeLists} />
 
                 <NavLink to={"/today"} className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
                   Task Today
@@ -111,7 +125,7 @@ export default function Note() {
                     />
                   </div>
                   <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
-                    {lists?.map((el) => (
+                    {storeLists?.map((el) => (
                       <option key={el.id} value={el.id}>
                         {el.title}
                       </option>
