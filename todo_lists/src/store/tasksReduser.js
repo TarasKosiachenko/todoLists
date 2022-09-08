@@ -14,9 +14,9 @@ export const tasksReduser = (state = defaultState, action) => {
         case ADD_TASK:
             return { ...state, tasks: [...state.tasks, action.payload] }
         case UPDATE_TASK:
-            return { ...state, tasks: [...state.tasks, action.payload] }
+            return { ...state, tasks: state.tasks.map(task => task.id === action.payload.id ? action.payload : task) }
         case DELETE_TASK:
-            return { ...state, tasks: state.tasks - action.payload }
+            return { ...state, tasks: state.tasks.filter(task => task.id !== action.payload) }
         default:
             return state
     }
@@ -25,3 +25,7 @@ export const tasksReduser = (state = defaultState, action) => {
 export const getTasksCustomerAction = (payload) => ({ type: GET_TASKS, payload })
 
 export const addTasksCustomerAction = (payload) => ({ type: ADD_TASK, payload })
+
+export const updateTasksCustomerAction = (payload) => ({ type: UPDATE_TASK, payload })
+
+export const deleteTasksCustomerAction = (payload) => ({ type: DELETE_TASK, payload })

@@ -1,9 +1,14 @@
 import React from "react";
 import "./index.css";
+import { useDispatch } from 'react-redux';
+
+import { axiosDeleteTask } from "../../asyncActions/tasks";
+import { axiosUpdateTask } from "../../asyncActions/tasks";
 
 import Lists from "../Lists/Lists";
 
-function TaskItem({todo, taskDelete, changeTaskDone }) {
+function TaskItem({ todo }) {
+  const dispatch = useDispatch()
 
   function getFormatedDate(date) {
     if (date === null || date === "") {
@@ -24,7 +29,7 @@ function TaskItem({todo, taskDelete, changeTaskDone }) {
       <li
         id={todo.id}
         className={
-          (new Date(todo.due_date) < new Date(Date.now() - ( 3600 * 1000 * 24)) ? "overdue " : "") +
+          ((new Date(todo.due_date) < new Date(Date.now() - (3600 * 1000 * 24))) || todo.due_date === null ? "overdue " : "") +
           (todo.done ? "done" : "")
         }>
         <div>
@@ -54,7 +59,7 @@ function TaskItem({todo, taskDelete, changeTaskDone }) {
         <div>
           <input
             type="checkbox"
-            onClick={() => changeTaskDone(todo)}
+            onClick={() => dispatch(axiosUpdateTask(todo))}
             className={todo.done ? "checkboxTask checked" : "checkboxTask"}
             defaultChecked={todo.done ? "checked" : ""}
           />
@@ -64,12 +69,12 @@ function TaskItem({todo, taskDelete, changeTaskDone }) {
         <div>
           <p>{todo.description}</p>
         </div>
-        <button onClick={() => taskDelete(todo)} type="button" className="btn btn-outline-danger delete_task">
+        <button onClick={() => dispatch(axiosDeleteTask(todo.id))} type="button" className="btn btn-outline-danger delete_task">
           X
         </button>
 
         {
-          todo.list ? <Lists lists={[todo.list]} /> : ''
+          todo.list ? <div style={{ paddingTop: "0px" }}>list:<Lists storeLists={[todo.list]} /></div> : ''
         }
       </li>
     </>

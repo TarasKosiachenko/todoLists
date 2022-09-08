@@ -1,37 +1,24 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 
 import TaskItem from "../TaskItem/TaskItem";
 
-function TasksToday({ responseObj }) {
-  const url = "http://localhost:5000/collection/today";
+import { axiosGetTodayTasks } from "../../asyncActions/todayTasks";
+import { useDispatch, useSelector } from 'react-redux';
 
-  const [tasksToday, setTasksToday] = useState([]);
+function TasksToday() {
+
+  const dispatch = useDispatch()
+  const storeTodayTasks = useSelector(state => state.todayTasksReduser.todayTasks)
 
   useEffect(() => {
-    if (responseObj !== null) {
-      setTasksToday((state) => [...state, responseObj]);
-    }
-    axios.get(url).then((response) => {
-      setTasksToday(response.data);
-    });
-  }, [responseObj]);
-
-  async function changeTaskDone(todo) {
-    return await axios.patch("http://localhost:5000/tasks/" + todo.id, { done: !todo.done })
-      .then(() => { setTasksToday([...tasksToday.filter(task => task.done !== todo.done)]) })
-  }
-
-  async function taskDelete(todo) {
-    return await axios.delete("http://localhost:5000/tasks/" + todo.id)
-      .then(() => { setTasksToday([...tasksToday.filter(task => task.id !== todo.id)]) })
-  }
+    dispatch(axiosGetTodayTasks())
+  }, [dispatch]);
 
   return (
     <>
       {
-        tasksToday.map((todo) => (
-          <TaskItem key={todo.id} todo={todo} changeTaskDone={changeTaskDone} taskDelete={taskDelete} />
+        storeTodayTasks.map((todo) => (
+          <TaskItem key={todo.id} todo={todo} />
         ))
       }
     </>
