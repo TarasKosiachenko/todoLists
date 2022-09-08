@@ -23,7 +23,7 @@ export default function Note() {
   });
 
   const dispatch = useDispatch()
-  const storeLists = useSelector(state => state.listsReduser.lists)
+  const storeLists = useSelector(state => state.dashboardReducer.lists)
   const storeTasks = useSelector(state => state.tasksReduser.tasks)
 
   useEffect(() => {

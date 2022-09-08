@@ -1,16 +1,22 @@
 const defaultState = {
+    today: 0,
     lists: [],
+    openedTasks: []
 }
 
 const GET_LISTS = 'GET_LISTS'
 
-export const listsReduser = (state = defaultState, action) => {
+export const dashboardReducer = (state = defaultState, action) => {
     switch (action.type) {
         case GET_LISTS:
-            return { ...state, lists: [...action.payload] }
+            return { ...state,
+                    today: action.payload.today,
+                    lists: action.payload.list,
+                    openedTasks: action.payload.openedTasks,
+            }
         default:
             return state
     }
 }
 
-export const getListsCustomerAction = (payload) => ({type: GET_LISTS, payload})
+export const getListsCustomerAction = (payload) => ({ type: GET_LISTS, payload })

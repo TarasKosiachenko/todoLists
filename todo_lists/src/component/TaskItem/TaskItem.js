@@ -29,7 +29,7 @@ function TaskItem({ todo }) {
       <li
         id={todo.id}
         className={
-          ((new Date(todo.due_date) < new Date(Date.now() - (3600 * 1000 * 24))) || todo.due_date === null ? "overdue " : "") +
+          ((new Date(todo.due_date) < new Date(Date.now() - (3600 * 1000 * 24))) && todo.due_date !== null ? "overdue " : "") +
           (todo.done ? "done" : "")
         }>
         <div>

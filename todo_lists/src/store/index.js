@@ -4,10 +4,10 @@ import thunk from 'redux-thunk'
 
 import {tasksReduser} from "./tasksReduser"
 import {todayTasksReduser} from "./todayTasksReduser"
-import {listsReduser} from "./dashboardReducer"
+import {dashboardReducer} from "./dashboardReducer"
 
 const rootReducer = combineReducers({
-    listsReduser,
+    dashboardReducer,
     tasksReduser,
     todayTasksReduser
 })
