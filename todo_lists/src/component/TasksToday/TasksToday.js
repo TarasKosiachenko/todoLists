@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 function TasksToday() {
 
   const dispatch = useDispatch()
-  const storeTodayTasks = useSelector(state => state.todayTasksReduser.todayTasks)
+  const storeTodayTasks = useSelector(state => state.todayTasks)
 
   useEffect(() => {
     dispatch(axiosGetTodayTasks())

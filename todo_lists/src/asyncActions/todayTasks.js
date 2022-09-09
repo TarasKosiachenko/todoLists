@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getTodayTasksCustomerAction } from "../store/todayTasksReduser"
+import { getTodayTasksCustomerAction } from "../store/todayTasks"
 
 export const axiosGetTodayTasks = () => {
     return function (dispatch) {

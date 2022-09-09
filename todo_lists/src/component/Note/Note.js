@@ -8,7 +8,7 @@ import Lists from "../Lists/Lists";
 import Tasks from "../Tasks/Tasks";
 import TasksToday from "../TasksToday/TasksToday";
 
-import { axiosGetTasks, axiosAddTask } from "../../asyncActions/tasks";
+import { axiosAddTask } from "../../asyncActions/tasks";
 import { axiosGetLists } from "../../asyncActions/lists";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,15 +23,10 @@ export default function Note() {
   });
 
   const dispatch = useDispatch()
-  const storeLists = useSelector(state => state.dashboardReducer.lists)
-  const storeTasks = useSelector(state => state.tasksReduser.tasks)
+  const storeLists = useSelector(state => state.dashboard.lists)
 
   useEffect(() => {
     dispatch(axiosGetLists())
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(axiosGetTasks())
   }, [dispatch]);
 
   function handleChange(e) {
@@ -73,60 +68,60 @@ export default function Note() {
               <Lists storeLists={storeLists} />
               <NavLink to={"/today"} className={({ isActive }) => (isActive ? 'active' : 'inactive')}>Task Today</NavLink>
             </Nav>
-              <form
-                name="task"
-                className="mb-3"
-                onSubmit={createTasks}
-                style={{ width: "100%" }}
+            <form
+              name="task"
+              className="mb-3"
+              onSubmit={createTasks}
+              style={{ width: "100%" }}
+            >
+              <div className="mb-2">
+                <input
+                  className="form-control input_name"
+                  type="text"
+                  placeholder="Title"
+                  name="name"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="mb-2">
+                <textarea
+                  className="form-control"
+                  name="description"
+                  placeholder="Description"
+                  cols="40"
+                  rows="5"
+                  onChange={handleChange}
+                />
+              </div>
+              <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
+                {storeLists?.map((el) => (
+                  <option key={el.id} value={el.id}>
+                    {el.title}
+                  </option>
+                ))}
+              </Form.Select>
+              <div
+                className="d-flex"
+                style={{ justifyContent: "space-between" }}
               >
-                <div className="mb-2">
+                <div>
                   <input
-                    className="form-control input_name"
-                    type="text"
-                    placeholder="Title"
-                    name="name"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="mb-2">
-                  <textarea
                     className="form-control"
-                    name="description"
-                    placeholder="Description"
-                    cols="40"
-                    rows="5"
+                    name="due_date"
+                    type="date"
+                    style={{ width: "140px" }}
                     onChange={handleChange}
                   />
                 </div>
-                <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
-                  {storeLists?.map((el) => (
-                    <option key={el.id} value={el.id}>
-                      {el.title}
-                    </option>
-                  ))}
-                </Form.Select>
-                <div
-                  className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                <Button
+                  type="submit"
+                  variant="outline-secondary"
+                  onMouseDown={(e) => e.preventDefault()}
                 >
-                  <div>
-                    <input
-                      className="form-control"
-                      name="due_date"
-                      type="date"
-                      style={{ width: "140px" }}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    variant="outline-secondary"
-                    onMouseDown={(e) => e.preventDefault()}
-                  >
-                    Create
-                  </Button>
-                </div>
-              </form>
+                  Create
+                </Button>
+              </div>
+            </form>
           </Col>
 
           <Col sm={8} className="text-center">
@@ -161,7 +156,7 @@ export default function Note() {
 
               <Routes>
                 <Route path={'/'} element={<HomePage />} />
-                <Route path='/lists/:id' element={<Tasks storeTasks={storeTasks} />} />
+                <Route path='/lists/:id' element={<Tasks />} />
 
                 <Route path={'/today'} element={<TasksToday />} />
               </Routes>

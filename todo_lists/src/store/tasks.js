@@ -1,22 +1,18 @@
-const defaultState = {
-    tasks: [],
-}
-
 const GET_TASKS = 'GET_TASKS'
 const ADD_TASK = 'ADD_TASK'
 const UPDATE_TASK = 'UPDATE_TASK'
 const DELETE_TASK = 'DELETE_TASK'
 
-export const tasksReduser = (state = defaultState, action) => {
+export const tasks = (state = [], action) => {
     switch (action.type) {
         case GET_TASKS:
-            return { ...state, tasks: [...action.payload] }
+            return action.payload
         case ADD_TASK:
-            return { ...state, tasks: [...state.tasks, action.payload] }
+            return [...state, action.payload]
         case UPDATE_TASK:
-            return { ...state, tasks: state.tasks.map(task => task.id === action.payload.id ? action.payload : task) }
+            return state.map(task => task.id === action.payload.id ? action.payload : task)
         case DELETE_TASK:
-            return { ...state, tasks: state.tasks.filter(task => task.id !== action.payload) }
+            return state.filter(task => task.id !== action.payload)
         default:
             return state
     }

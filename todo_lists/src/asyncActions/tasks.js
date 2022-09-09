@@ -4,11 +4,11 @@ import {
     addTasksCustomerAction,
     updateTasksCustomerAction,
     deleteTasksCustomerAction
-} from "../store/tasksReduser"
+} from "../store/tasks"
 
-export const axiosGetTasks = () => {
+export const axiosGetTasks = (listId) => {
     return function (dispatch) {
-        axios.get("http://localhost:5000/tasks")
+        axios.get(`http://localhost:5000/lists/${listId}/tasks?all=true`)
             .then(response => dispatch(getTasksCustomerAction(response.data)))
     }
 }

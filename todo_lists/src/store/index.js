@@ -1,15 +1,15 @@
-import {applyMiddleware, combineReducers, createStore} from 'redux'
+import { applyMiddleware, combineReducers, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
-import {tasksReduser} from "./tasksReduser"
-import {todayTasksReduser} from "./todayTasksReduser"
-import {dashboardReducer} from "./dashboardReducer"
+import { tasks } from "./tasks"
+import { todayTasks } from "./todayTasks"
+import { dashboardReducer } from "./dashboardReducer"
 
 const rootReducer = combineReducers({
-    dashboardReducer,
-    tasksReduser,
-    todayTasksReduser
+    dashboard: dashboardReducer,
+    tasks,
+    todayTasks
 })
 
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))

@@ -9,10 +9,11 @@ const GET_LISTS = 'GET_LISTS'
 export const dashboardReducer = (state = defaultState, action) => {
     switch (action.type) {
         case GET_LISTS:
-            return { ...state,
-                    today: action.payload.today,
-                    lists: action.payload.list,
-                    openedTasks: action.payload.openedTasks,
+            return {
+                ...state,
+                today: action.payload.today,
+                lists: action.payload.list,
+                openedTasks: action.payload.openedTasks,
             }
         default:
             return state
