@@ -57,3 +57,11 @@ h1 {
     flex-direction: column;
   }
 }
+
+@media (max-width: 576px) {
+  .btn-group {
+    position: relative;
+    left: 0;
+    top: 5px;
+  }
+}

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./index.css";
-import { Route, Routes, NavLink, Link } from "react-router-dom";
+import { Route, Routes, NavLink, Link, useLocation } from "react-router-dom";
 import { Container, Tab, Nav, Row, Col, Button, Form } from "react-bootstrap";
 
 import HomePage from "../HomePage/HomePage";
@@ -11,9 +11,9 @@ import TasksToday from "../TasksToday/TasksToday";
 import { axiosAddTask } from "../../asyncActions/tasks";
 import { axiosGetLists } from "../../asyncActions/lists";
 
-import { incrementCounterAction } from "../../store/dashboardReducer"
+import { incrementCounterAction } from "../../store/dashboardReducer";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
 const INITIAL_STATE = {
   name: "",
@@ -21,20 +21,29 @@ const INITIAL_STATE = {
   due_date: null,
   done: false,
   list_id: 2,
-}
+};
 
 export default function Note() {
+  const { pathname } = useLocation();
   const [form, setForm] = useState(INITIAL_STATE);
 
-  const dispatch = useDispatch()
-  const storeLists = useSelector(state => state.dashboard.lists)
+  const dispatch = useDispatch();
+  const storeLists = useSelector((state) => state.dashboard.lists);
+
+  const shouldAddValue = useMemo(() => {
+    return (
+      (!!form.due_date &&
+        new Date(form.due_date) <= new Date() &&
+        pathname.includes("today")) ||
+      !pathname.includes("today")
+    );
+  }, [form.due_date, pathname]);
 
   useEffect(() => {
-    dispatch(axiosGetLists())
+    dispatch(axiosGetLists());
   }, [dispatch]);
 
   function handleChange(e) {
-    console.log(e.target.value);
     setForm((state) => ({
       ...state,
       [e.target.name]: e.target.value,
@@ -54,14 +63,14 @@ export default function Note() {
     e.preventDefault();
     e.stopPropagation();
     if (form.name.length) {
-      dispatch(axiosAddTask(form))
-      setForm(INITIAL_STATE)
-      dispatch(incrementCounterAction(form.list_id))
+      dispatch(axiosAddTask({ ...form, shouldAddValue }));
+      setForm(INITIAL_STATE);
+      dispatch(incrementCounterAction(form.list_id));
       e.target.reset();
     } else {
-      alert('please enter the task name')
-      e.target[0].className = 'form-control emptyInput'
-      setTimeout(() => e.target[0].className = 'form-control', 2000);
+      alert("please enter the task name");
+      e.target[0].className = "form-control emptyInput";
+      setTimeout(() => (e.target[0].className = "form-control"), 2000);
     }
   }
 
@@ -70,11 +79,17 @@ export default function Note() {
       <Tab.Container id="left-tabs" defaultActiveKey="myNotes">
         <Row>
           <Col sm={4} className="listSidebar">
-
             <Nav variant="pills" className="flex-column mt-3">
-              <Link to={"/"}><h1>Lists</h1></Link>
+              <Link to={"/"}>
+                <h1>Lists</h1>
+              </Link>
               <Lists storeLists={storeLists} />
-              <NavLink to={"/today"} className={({ isActive }) => (isActive ? 'active' : 'inactive')}>Task Today</NavLink>
+              <NavLink
+                to={"/today"}
+                className={({ isActive }) => (isActive ? "active" : "inactive")}
+              >
+                Task Today
+              </NavLink>
             </Nav>
             <form
               name="task"
@@ -102,16 +117,18 @@ export default function Note() {
                   onChange={handleChange}
                 />
               </div>
-              <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
+              <Form.Select
+                className="mb-2"
+                name="list_id"
+                onChange={handleChange}
+              >
                 {storeLists?.map((el) => (
                   <option key={el.id} value={el.id}>
                     list: {el.title}
                   </option>
                 ))}
               </Form.Select>
-              <div
-                className="form-date-btn-create"
-              >
+              <div className="form-date-btn-create">
                 <div>
                   <input
                     className="form-control"
@@ -163,12 +180,11 @@ export default function Note() {
               </div>
 
               <Routes>
-                <Route path={'/'} element={<HomePage />} />
-                <Route path='/lists/:id' element={<Tasks />} />
+                <Route path={"/"} element={<HomePage />} />
+                <Route path="/lists/:id" element={<Tasks />} />
 
-                <Route path={'/today'} element={<TasksToday />} />
+                <Route path={"/today"} element={<TasksToday />} />
               </Routes>
-
             </Tab.Content>
           </Col>
         </Row>

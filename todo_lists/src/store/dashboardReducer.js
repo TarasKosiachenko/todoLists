@@ -9,7 +9,7 @@ const GET_LISTS = "GET_LISTS";
 const INCREMENT_COUNTER = "INCREMENT_COUNTER";
 const DECREMENT_COUNTER = "DECREMENT_COUNTER";
 
-export const dashboardReducer = (state = defaultState, action) => {
+export const dashboard = (state = defaultState, action) => {
   switch (action.type) {
     case GET_LISTS:
       return {
