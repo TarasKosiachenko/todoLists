@@ -16,11 +16,13 @@ function TasksToday() {
 
   return (
     <>
+    <div className="tasks-list">
       {
         storeTodayTasks.map((todo) => (
           <TaskItem key={todo.id} todo={todo} />
         ))
       }
+      </div>
     </>
   );
 }

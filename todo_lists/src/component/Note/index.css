@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Amaranth:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Amaranth:wght@700&display=swap");
 
 h1 {
-  font-family: 'Amaranth', sans-serif;
+  font-family: "Amaranth", sans-serif;
   color: #333;
   text-decoration: none;
 }
-
 
 .listSidebar {
   background: rgb(228, 228, 228);
@@ -22,8 +21,9 @@ h1 {
 .btn-group {
   position: absolute;
   left: -100px;
+  top: 25px;
 }
-.btn-group>.btn {
+.btn-group > .btn {
   padding: 0 5px;
 }
 .btn-group label {
@@ -44,4 +44,16 @@ h1 {
 }
 .emptyInput {
   border: 1px solid red;
+}
+
+.form-date-btn-create {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .form-date-btn-create {
+    height: 84px;
+    flex-direction: column;
+  }
 }

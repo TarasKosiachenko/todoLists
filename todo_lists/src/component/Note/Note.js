@@ -11,16 +11,20 @@ import TasksToday from "../TasksToday/TasksToday";
 import { axiosAddTask } from "../../asyncActions/tasks";
 import { axiosGetLists } from "../../asyncActions/lists";
 
+import { incrementCounterAction } from "../../store/dashboardReducer"
+
 import { useDispatch, useSelector } from 'react-redux';
 
+const INITIAL_STATE = {
+  name: "",
+  description: "",
+  due_date: null,
+  done: false,
+  list_id: 2,
+}
+
 export default function Note() {
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    due_date: null,
-    done: false,
-    list_id: 2,
-  });
+  const [form, setForm] = useState(INITIAL_STATE);
 
   const dispatch = useDispatch()
   const storeLists = useSelector(state => state.dashboard.lists)
@@ -30,6 +34,7 @@ export default function Note() {
   }, [dispatch]);
 
   function handleChange(e) {
+    console.log(e.target.value);
     setForm((state) => ({
       ...state,
       [e.target.name]: e.target.value,
@@ -50,8 +55,11 @@ export default function Note() {
     e.stopPropagation();
     if (form.name.length) {
       dispatch(axiosAddTask(form))
+      setForm(INITIAL_STATE)
+      dispatch(incrementCounterAction(form.list_id))
       e.target.reset();
     } else {
+      alert('please enter the task name')
       e.target[0].className = 'form-control emptyInput'
       setTimeout(() => e.target[0].className = 'form-control', 2000);
     }
@@ -74,6 +82,7 @@ export default function Note() {
               onSubmit={createTasks}
               style={{ width: "100%" }}
             >
+              Create New Task
               <div className="mb-2">
                 <input
                   className="form-control input_name"
@@ -96,13 +105,12 @@ export default function Note() {
               <Form.Select className="mb-2" name="list_id" onChange={handleChange}>
                 {storeLists?.map((el) => (
                   <option key={el.id} value={el.id}>
-                    {el.title}
+                    list: {el.title}
                   </option>
                 ))}
               </Form.Select>
               <div
-                className="d-flex"
-                style={{ justifyContent: "space-between" }}
+                className="form-date-btn-create"
               >
                 <div>
                   <input
@@ -125,7 +133,7 @@ export default function Note() {
           </Col>
 
           <Col sm={8} className="text-center">
-            <Tab.Content className="mt-3 todo_list">
+            <Tab.Content className="todo_list">
               <div
                 onClick={changeTargerRadio}
                 className="btn-group"

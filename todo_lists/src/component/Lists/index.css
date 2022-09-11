@@ -8,8 +8,6 @@ a {
   background-color: #6c757d;
 }
 
-
-
 #Nav_menu {
   display: flex;
   flex-direction: row;
@@ -21,7 +19,10 @@ a {
 }
 
 .inactive {
+  display: flex;
+  height: 35px;
   padding: 0 10px 0 10px;
+  justify-content: space-between;
 }
 
 .inactive:hover {
@@ -34,7 +35,10 @@ a {
 }
 
 .active {
-  padding: 5px 0 5px 10px;
+  padding: 0 10px 0 10px;
+  display: flex;
+  height: 35px;
+  justify-content: space-between;
   background: #6c757d;
   color: #fff;
   border-radius: 10px;

@@ -11,7 +11,7 @@ function Lists({ storeLists }) {
           <NavLink to={"/lists/" + (list.id || list.list_id)} key={list.id || list.list_id}
             className={({ isActive }) => (isActive ? 'active' : 'inactive')}
           >
-            {list.title} {list.undone}
+            {list.title} <p>{list.undone}</p>
           </NavLink>
         ))
       }

@@ -9,11 +9,11 @@
 
 #pot {
     top: 15%;
-    width: 50%;
+    width: 35%;
     position: absolute;
     animation: linear infinite;
     animation-name: run;
-    animation-duration: 6s;
+    animation-duration: 8s;
 }
 
 @keyframes run {

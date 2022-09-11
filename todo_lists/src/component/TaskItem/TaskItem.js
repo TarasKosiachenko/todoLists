@@ -1,14 +1,19 @@
 import React from "react";
 import "./index.css";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 import { axiosDeleteTask } from "../../asyncActions/tasks";
 import { axiosUpdateTask } from "../../asyncActions/tasks";
 
+import {
+  decrementCounterAction,
+  incrementCounterAction,
+} from "../../store/dashboardReducer";
+
 import Lists from "../Lists/Lists";
 
 function TaskItem({ todo }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   function getFormatedDate(date) {
     if (date === null || date === "") {
@@ -24,14 +29,32 @@ function TaskItem({ todo }) {
     return values.join(".");
   }
 
+  function handleCheckboxChange() {
+    dispatch(axiosUpdateTask(todo));
+    if (todo.done) {
+      dispatch(incrementCounterAction(todo.list_id));
+    } else {
+      dispatch(decrementCounterAction(todo.list_id));
+    }
+  }
+  function deleteTask() {
+    dispatch(axiosDeleteTask(todo.id));
+    if (!todo.done) {
+      dispatch(decrementCounterAction(todo.list_id));
+    }
+  }
+
   return (
     <>
       <li
         id={todo.id}
         className={
-          ((new Date(todo.due_date) < new Date(Date.now() - (3600 * 1000 * 24))) && todo.due_date !== null ? "overdue " : "") +
-          (todo.done ? "done" : "")
-        }>
+          (new Date(todo.due_date) < new Date(Date.now() - 3600 * 1000 * 24) &&
+          todo.due_date !== null
+            ? "overdue "
+            : "") + (todo.done ? "done" : "")
+        }
+      >
         <div>
           <svg
             width="14"
@@ -59,7 +82,8 @@ function TaskItem({ todo }) {
         <div>
           <input
             type="checkbox"
-            onClick={() => dispatch(axiosUpdateTask(todo))}
+            // dispatch(axiosUpdateTask(todo))
+            onClick={handleCheckboxChange}
             className={todo.done ? "checkboxTask checked" : "checkboxTask"}
             defaultChecked={todo.done ? "checked" : ""}
           />
@@ -69,13 +93,23 @@ function TaskItem({ todo }) {
         <div>
           <p>{todo.description}</p>
         </div>
-        <button onClick={() => dispatch(axiosDeleteTask(todo.id))} type="button" className="btn btn-outline-danger delete_task">
+        <button
+          // dispatch(axiosDeleteTask(todo.id))
+          onClick={deleteTask}
+          type="button"
+          className="btn btn-outline-danger delete_task"
+        >
           X
         </button>
 
-        {
-          todo.list ? <div style={{ paddingTop: "0px" }}>list:<Lists storeLists={[todo.list]} /></div> : ''
-        }
+        {todo.list ? (
+          <div style={{ paddingTop: "0px" }}>
+            list:
+            <Lists storeLists={[todo.list]} />
+          </div>
+        ) : (
+          ""
+        )}
       </li>
     </>
   );
