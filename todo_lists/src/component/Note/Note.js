@@ -20,7 +20,7 @@ const INITIAL_STATE = {
   description: "",
   due_date: null,
   done: false,
-  list_id: 2,
+  list_id: 1,
 };
 
 export default function Note() {
